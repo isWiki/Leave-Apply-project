@@ -1,0 +1,33 @@
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px;background:linear-gradient(180deg,#f0f6ff 0%, #ffffff 60%)}
+.app-wrap{max-width:900px;margin:0 auto}
+#app{width:900px;margin:0 auto;background:#ffffff;padding:24px;border-radius:12px;min-height:80vh;box-shadow:0 10px 30px rgba(20,60,120,0.08);border:1px solid rgba(20,60,120,0.04)}
+
+/* header / nav */
+.app-wrap > .header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#2d8cf0,#1a73e8);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+nav{display:flex;gap:8px;margin-bottom:18px}
+nav button{background:transparent;border:1px solid transparent;padding:8px 14px;border-radius:8px;color:#1658d8;font-weight:600;cursor:pointer}
+nav button:hover{background:rgba(29,78,216,0.06)}
+
+/* 表单与卡片 */
+form, .card, #app > div{background:transparent}
+label{display:block;margin-top:8px;color:#2b3b4b;font-size:14px}
+.required-mark{color:#e53935;margin-right:4px;font-weight:700}
+input,select,textarea{padding:10px;border:1px solid rgba(34,58,86,0.08);border-radius:8px;font-size:14px;margin-top:6px;width:100%}
+button{padding:8px 14px;border-radius:8px;border:none;background:linear-gradient(90deg,#2d8cf0,#1677ff);color:#fff;font-weight:600;cursor:pointer}
+button.secondary{background:#f3f6fb;color:#1658d8;border:1px solid rgba(22,88,216,0.08)}
+
+h2{margin-bottom:12px;color:#13294b;font-size:20px}
+
+/* 表格样式 */
+table{width:100%;border-collapse:collapse;background:transparent}
+th,td{border-bottom:1px solid rgba(34,58,86,0.06);padding:12px;text-align:left}
+th{color:#3a4a6a;background:rgba(20,60,120,0.02)}
+
+/* 小屏幕优化 */
+@media (max-width:600px){
+	body{padding:20px}
+	#app{padding:16px}
+	nav{flex-wrap:wrap}
+}
