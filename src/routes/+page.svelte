@@ -39,10 +39,10 @@
   <main class="mx-auto max-w-5xl rounded-[32px] bg-white p-8 shadow-soft border border-slate-200">
     <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="flex h-12 w-12 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-500 to-sky-700 text-xl font-bold text-white">加</div>
+        <div class="flex h-12 w-12 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-500 to-sky-700 text-xl font-bold text-white">审</div>
         <div>
-          <h1 class="text-2xl font-semibold text-slate-950">加班申请流程系统</h1>
-          <p class="text-sm text-slate-500">使用 SvelteKit + Tailwind 简化 UI 与逻辑。</p>
+          <h1 class="text-2xl font-semibold text-slate-950">通用审批工作流系统</h1>
+          <p class="text-sm text-slate-500">使用 SvelteKit + Tailwind 支持加班、差旅、采购、报销等申请类型。</p>
         </div>
       </div>
       <nav class="flex flex-wrap gap-3">

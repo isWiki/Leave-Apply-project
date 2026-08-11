@@ -21,11 +21,11 @@
     </div>
     <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <p class="text-sm text-slate-500">已通过</p>
-      <p class="mt-4 text-3xl font-semibold text-slate-900">{stat.pass}</p>
+      <p class="mt-4 text-3xl font-semibold text-slate-900">{stat.approved}</p>
     </div>
     <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <p class="text-sm text-slate-500">已驳回</p>
-      <p class="mt-4 text-3xl font-semibold text-slate-900">{stat.reject}</p>
+      <p class="mt-4 text-3xl font-semibold text-slate-900">{stat.rejected}</p>
     </div>
   </div>
 </section>
