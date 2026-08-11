@@ -11,13 +11,13 @@
 
 ## 说明
 
-- 这个项目已经包含编译后的前端文件，通常不需要先执行 npm install。
-- 如果你只是想看页面，使用 Live Server 即可。
+- 这个项目已经迁移为 SvelteKit + TailwindCss，推荐使用 `npm run dev` 本地开发。
+- 如果你只是想看页面，可以直接启动本地开发服务器后访问 `http://localhost:5173`。
 - 如果你想重新编译源码或运行测试，再执行：
 
 ```bash
 npm install
-npm run build
+npm run dev
 ```
 
 ## 备注

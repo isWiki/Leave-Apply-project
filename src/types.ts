@@ -28,3 +28,5 @@ export interface OvertimeApply {
 
 // 页面类型
 export type PageType = 'form' | 'preview' | 'list' | 'detail' | 'stat'
+
+export const APP_PAGES: PageType[] = ['form', 'list', 'stat']
