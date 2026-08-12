@@ -1,7 +1,7 @@
 // 预览，支持回跳表单修改
 import type { FormValue, PageType } from '../types.js'
 import { mockUsers } from '../mock.js'
-import { genEl } from '../utils.js'
+import { genEl, appendDetailFields } from '../utils.js'
 import { createApply, resubmitApply } from '../store.js'
 import { clearCachedForm } from './FormComponent.js'
 import {
@@ -23,7 +23,7 @@ export function renderPreview(root: HTMLElement, onChangePage: PageCb, payload?:
     { label: '申请人', value: user?.name || '' },
     ...getApplicationDetailFields(form)
   ]
-  wrap.innerHTML = fields.map(field => `<p><b>${field.label}：</b>${field.value}</p>`).join('')
+  appendDetailFields(wrap, fields)
   root.appendChild(wrap)
 
   const btnWrap = genEl('div', { style: 'margin-top:16px;display:flex;gap:10px' })

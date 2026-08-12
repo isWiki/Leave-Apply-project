@@ -6,7 +6,7 @@ import {
   rejectToPreviousNode
 } from '../store.js'
 import { mockUsers } from '../mock.js'
-import { genEl, formatDateShort } from '../utils.js'
+import { genEl, formatDateShort, appendDetailFields } from '../utils.js'
 import type { PageType } from '../types.js'
 import {
   getApplicationDetailFields,
@@ -62,7 +62,7 @@ export function renderDetail(root: HTMLElement, onChangePage: PageCb, payload?: 
     { label: '提交时间', value: formatDateShort(item.createTime) },
     ...getApplicationDetailFields(item)
   ]
-  wrap.innerHTML = fields.map(field => `<p><b>${field.label}：</b>${field.value}</p>`).join('')
+  appendDetailFields(wrap, fields)
   root.appendChild(wrap)
 
   if (item.status === 'pending') {

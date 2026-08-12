@@ -1,7 +1,7 @@
 // 申请列表
 import { getApplyList, withdrawApply } from '../store.js'
 import { mockUsers } from '../mock.js'
-import { genEl, formatDateShort } from '../utils.js'
+import { createTextCell, genEl, formatDateShort } from '../utils.js'
 import type { PageType } from '../types.js'
 import {
   getApplicationSummary,
@@ -11,6 +11,8 @@ import {
 
 type PageCb = (page: PageType, payload?: Record<string, string>) => void
 
+const CELL_STYLE = 'border:1px solid #aaa;padding:6px'
+
 export function renderList(root: HTMLElement, onChangePage: PageCb) {
   root.append(genEl('h2', {}, '申请列表'))
   const list = getApplyList()
@@ -18,32 +20,27 @@ export function renderList(root: HTMLElement, onChangePage: PageCb) {
     root.append(genEl('p', {}, '暂无申请记录'))
     return
   }
+
   const table = genEl('table', { style: 'border-collapse:collapse;width:100%;max-width:100%' })
-  table.innerHTML = `
-  <thead>
-    <tr>
-      <th style="border:1px solid #aaa;padding:6px">申请人</th>
-      <th style="border:1px solid #aaa;padding:6px">类型</th>
-      <th style="border:1px solid #aaa;padding:6px">摘要</th>
-      <th style="border:1px solid #aaa;padding:6px">状态</th>
-      <th style="border:1px solid #aaa;padding:6px">创建时间</th>
-      <th style="border:1px solid #aaa;padding:6px">操作</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-  `
-  const tbody = table.querySelector('tbody')!
+  const thead = document.createElement('thead')
+  const headRow = document.createElement('tr')
+  ;['申请人', '类型', '摘要', '状态', '创建时间', '操作'].forEach(title => {
+    headRow.appendChild(createTextCell(title, CELL_STYLE))
+  })
+  thead.appendChild(headRow)
+  table.appendChild(thead)
+
+  const tbody = document.createElement('tbody')
   list.forEach(item => {
     const user = mockUsers.find(u => u.id === item.applicantId)
-    const tr = genEl('tr')
-    tr.innerHTML = `
-      <td style="border:1px solid #aaa;padding:6px">${user?.name}</td>
-      <td style="border:1px solid #aaa;padding:6px">${getApplicationTypeLabel(item.applicationType)}</td>
-      <td style="border:1px solid #aaa;padding:6px">${getApplicationSummary(item)}</td>
-      <td style="border:1px solid #aaa;padding:6px">${getApplicationStatusLabel(item)}</td>
-      <td style="border:1px solid #aaa;padding:6px">${formatDateShort(item.createTime)}</td>
-    `
-    const tdOp = genEl('td', { style: 'border:1px solid #aaa;padding:6px' })
+    const tr = document.createElement('tr')
+    tr.appendChild(createTextCell(user?.name ?? '', CELL_STYLE))
+    tr.appendChild(createTextCell(getApplicationTypeLabel(item.applicationType), CELL_STYLE))
+    tr.appendChild(createTextCell(getApplicationSummary(item), CELL_STYLE))
+    tr.appendChild(createTextCell(getApplicationStatusLabel(item), CELL_STYLE))
+    tr.appendChild(createTextCell(formatDateShort(item.createTime), CELL_STYLE))
+
+    const tdOp = createTextCell('', CELL_STYLE)
     const btn = genEl('button', {}, '查看详情')
     btn.onclick = () => onChangePage('detail', { id: item.id })
     tdOp.appendChild(btn)
@@ -59,5 +56,6 @@ export function renderList(root: HTMLElement, onChangePage: PageCb) {
     tr.appendChild(tdOp)
     tbody.appendChild(tr)
   })
+  table.appendChild(tbody)
   root.appendChild(table)
 }
