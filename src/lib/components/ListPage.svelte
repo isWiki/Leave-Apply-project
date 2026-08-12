@@ -2,7 +2,12 @@
   import { createEventDispatcher } from 'svelte';
   import { getApplyList } from '../../store';
   import { mockUsers } from '../../mock';
-  import { formatDate, formatDateShort } from '../../utils';
+  import { formatDateShort } from '../../utils';
+  import {
+    getApplicationSummary,
+    getApplicationTypeLabel,
+    getStatusLabel
+  } from '../../application';
   import type { PageType } from '../../types';
 
   const dispatch = createEventDispatcher<{ navigate: { page: PageType; payload?: Record<string, string> } }>();
@@ -11,16 +16,12 @@
   function openDetail(id: string) {
     dispatch('navigate', { page: 'detail', payload: { id } });
   }
-
-  function statusText(status: string) {
-    return status === 'pending' ? '待审批' : status === 'pass' ? '已通过' : '已驳回';
-  }
 </script>
 
 <section class="space-y-6">
   <div>
     <h2 class="text-2xl font-semibold text-slate-900">申请列表</h2>
-    <p class="mt-2 text-sm text-slate-500">当前已提交的加班申请，点击“查看详情”可以进入审批页面。</p>
+    <p class="mt-2 text-sm text-slate-500">查看各类审批申请，点击“查看详情”进入审批页面。</p>
   </div>
 
   {#if list.length === 0}
@@ -31,7 +32,8 @@
         <thead class="bg-slate-50">
           <tr>
             <th class="px-6 py-4 font-medium text-slate-600">申请人</th>
-            <th class="px-6 py-4 font-medium text-slate-600">加班日期</th>
+            <th class="px-6 py-4 font-medium text-slate-600">类型</th>
+            <th class="px-6 py-4 font-medium text-slate-600">摘要</th>
             <th class="px-6 py-4 font-medium text-slate-600">状态</th>
             <th class="px-6 py-4 font-medium text-slate-600">创建时间</th>
             <th class="px-6 py-4 font-medium text-slate-600">操作</th>
@@ -41,8 +43,9 @@
           {#each list as item}
             <tr>
               <td class="px-6 py-4 text-slate-700">{mockUsers.find((user) => user.id === item.applicantId)?.name}</td>
-              <td class="px-6 py-4 text-slate-700">{formatDate(item.overtimeDate)}</td>
-              <td class="px-6 py-4 text-slate-700">{statusText(item.status)}</td>
+              <td class="px-6 py-4 text-slate-700">{getApplicationTypeLabel(item.applicationType)}</td>
+              <td class="px-6 py-4 text-slate-700">{getApplicationSummary(item)}</td>
+              <td class="px-6 py-4 text-slate-700">{getStatusLabel(item.status)}</td>
               <td class="px-6 py-4 text-slate-700">{formatDateShort(item.createTime)}</td>
               <td class="px-6 py-4">
                 <button class="btn-secondary" on:click={() => openDetail(item.id)}>查看详情</button>

@@ -1,8 +1,13 @@
 // 申请详情 + 模拟审批
 import { getApplyById, updateApplyStatus } from '../store.js'
 import { mockUsers } from '../mock.js'
-import { genEl, formatDate, formatDateShort } from '../utils.js'
+import { genEl, formatDateShort } from '../utils.js'
 import type { PageType } from '../types.js'
+import {
+  getApplicationDetailFields,
+  getApplicationTypeLabel,
+  getStatusLabel
+} from '../application.js'
 
 type PageCb = (page: PageType) => void
 
@@ -16,27 +21,26 @@ export function renderDetail(root: HTMLElement, onChangePage: PageCb, payload?: 
   root.append(genEl('h2', {}, '申请详情'))
   const user = mockUsers.find(u => u.id === item.applicantId)
   const wrap = genEl('div', { style: 'border:1px solid #ccc;padding:16px;border-radius:6px;max-width:100%' })
-  wrap.innerHTML = `
-    <p><b>申请人：</b>${user?.name}</p>
-    <p><b>加班日期：</b>${formatDate(item.overtimeDate)}</p>
-    <p><b>时段：</b>${item.startTime} ~ ${item.endTime}</p>
-    <p><b>事由：</b>${item.reason}</p>
-    <p><b>当前状态：</b>${statusText(item.status)}</p>
-    <p><b>提交时间：</b>${formatDateShort(item.createTime)}</p>
-  `
+  const fields = [
+    { label: '申请类型', value: getApplicationTypeLabel(item.applicationType) },
+    { label: '申请人', value: user?.name || '' },
+    { label: '当前状态', value: getStatusLabel(item.status) },
+    { label: '提交时间', value: formatDateShort(item.createTime) },
+    ...getApplicationDetailFields(item)
+  ]
+  wrap.innerHTML = fields.map(field => `<p><b>${field.label}：</b>${field.value}</p>`).join('')
   root.appendChild(wrap)
 
-  // 模拟审批操作，仅待审批可操作
   if (item.status === 'pending') {
     const btnWrap = genEl('div', { style: 'margin-top:12px;display:flex;gap:8px' })
     const btnPass = genEl('button', {}, '模拟审批通过')
     btnPass.onclick = () => {
-      updateApplyStatus(item.id, 'pass')
+      updateApplyStatus(item.id, 'approved')
       onChangePage('list')
     }
     const btnReject = genEl('button', {}, '模拟审批驳回')
     btnReject.onclick = () => {
-      updateApplyStatus(item.id, 'reject')
+      updateApplyStatus(item.id, 'rejected')
       onChangePage('list')
     }
     btnWrap.appendChild(btnPass)
@@ -47,9 +51,4 @@ export function renderDetail(root: HTMLElement, onChangePage: PageCb, payload?: 
   const backBtn = genEl('button', { style: 'margin-top:12px' }, '返回列表')
   backBtn.onclick = () => onChangePage('list')
   root.appendChild(backBtn)
-}
-
-function statusText(s: string) {
-  const map: Record<string, string> = { pending: '待审批', pass: '已通过', reject: '已驳回' }
-  return map[s] || s
 }
