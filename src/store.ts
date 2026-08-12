@@ -44,6 +44,15 @@ export function updateApplyStatus(id: string, status: ApplicationStatus): boolea
   return true
 }
 
+export function withdrawApply(id: string): boolean {
+  const list = getApplyList()
+  const idx = list.findIndex(i => i.id === id)
+  if (idx === -1 || list[idx].status !== 'pending') return false
+  list.splice(idx, 1)
+  saveApplyList(list)
+  return true
+}
+
 export function getApplyById(id: string): Application | undefined {
   return getApplyList().find(i => i.id === id)
 }

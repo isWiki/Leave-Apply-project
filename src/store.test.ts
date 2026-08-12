@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { createApply, getApplyById, getApplyList, getStat, updateApplyStatus } from './store'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { createApply, getApplyById, getApplyList, getStat, updateApplyStatus, withdrawApply } from './store'
 
 beforeEach(() => {
   localStorage.clear()
@@ -43,5 +43,38 @@ describe('store', () => {
 
     const stat = getStat()
     expect(stat).toEqual({ total: 1, pending: 0, approved: 1, rejected: 0 })
+  })
+
+  it('withdraws pending application and rejects non-pending', () => {
+    let now = 1000
+    vi.spyOn(Date, 'now').mockImplementation(() => {
+      now += 1
+      return now
+    })
+
+    const pending = createApply({
+      applicantId: 'u1',
+      applicationType: 'overtime',
+      overtimeDate: '2026-08-10',
+      startTime: '18:00',
+      endTime: '20:00',
+      reason: '项目上线',
+      status: 'pending'
+    })
+    const approved = createApply({
+      applicantId: 'u1',
+      applicationType: 'overtime',
+      overtimeDate: '2026-08-11',
+      startTime: '18:00',
+      endTime: '20:00',
+      reason: '其他',
+      status: 'approved'
+    })
+
+    expect(withdrawApply(pending.id)).toBe(true)
+    expect(getApplyList()).toHaveLength(1)
+    expect(getApplyById(pending.id)).toBeUndefined()
+    expect(withdrawApply(approved.id)).toBe(false)
+    expect(getApplyList()).toHaveLength(1)
   })
 })

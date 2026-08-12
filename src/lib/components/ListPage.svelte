@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { getApplyList } from '../../store';
+  import { getApplyList, withdrawApply } from '../../store';
   import { mockUsers } from '../../mock';
   import { formatDateShort } from '../../utils';
   import {
@@ -11,10 +11,17 @@
   import type { PageType } from '../../types';
 
   const dispatch = createEventDispatcher<{ navigate: { page: PageType; payload?: Record<string, string> } }>();
-  const list = getApplyList();
+  let list = getApplyList();
 
   function openDetail(id: string) {
     dispatch('navigate', { page: 'detail', payload: { id } });
+  }
+
+  function withdraw(id: string) {
+    if (!confirm('确认撤回该申请？')) return;
+    if (withdrawApply(id)) {
+      list = getApplyList();
+    }
   }
 </script>
 
@@ -48,7 +55,12 @@
               <td class="px-6 py-4 text-slate-700">{getStatusLabel(item.status)}</td>
               <td class="px-6 py-4 text-slate-700">{formatDateShort(item.createTime)}</td>
               <td class="px-6 py-4">
-                <button class="btn-secondary" on:click={() => openDetail(item.id)}>查看详情</button>
+                <div class="flex flex-wrap gap-2">
+                  <button class="btn-secondary" on:click={() => openDetail(item.id)}>查看详情</button>
+                  {#if item.status === 'pending'}
+                    <button class="btn-secondary" on:click={() => withdraw(item.id)}>撤回</button>
+                  {/if}
+                </div>
               </td>
             </tr>
           {/each}

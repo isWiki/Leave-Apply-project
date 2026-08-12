@@ -1,5 +1,5 @@
 // 申请列表
-import { getApplyList } from '../store.js'
+import { getApplyList, withdrawApply } from '../store.js'
 import { mockUsers } from '../mock.js'
 import { genEl, formatDateShort } from '../utils.js'
 import type { PageType } from '../types.js'
@@ -47,6 +47,15 @@ export function renderList(root: HTMLElement, onChangePage: PageCb) {
     const btn = genEl('button', {}, '查看详情')
     btn.onclick = () => onChangePage('detail', { id: item.id })
     tdOp.appendChild(btn)
+    if (item.status === 'pending') {
+      const withdrawBtn = genEl('button', { style: 'margin-left:8px' }, '撤回')
+      withdrawBtn.onclick = () => {
+        if (confirm('确认撤回该申请？') && withdrawApply(item.id)) {
+          onChangePage('list')
+        }
+      }
+      tdOp.appendChild(withdrawBtn)
+    }
     tr.appendChild(tdOp)
     tbody.appendChild(tr)
   })
