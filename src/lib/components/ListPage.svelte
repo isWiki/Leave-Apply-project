@@ -38,9 +38,9 @@
       <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
         <thead class="bg-slate-50">
           <tr>
-            <th class="px-6 py-4 font-medium text-slate-600">申请人</th>
-            <th class="px-6 py-4 font-medium text-slate-600">类型</th>
-            <th class="px-6 py-4 font-medium text-slate-600">摘要</th>
+            <th class="px-6 py-4 font-medium text-slate-600" style="width: 6rem">申请人</th>
+            <th class="px-6 py-4 font-medium text-slate-600" style="width: 5rem">类型</th>
+            <th class="px-6 py-4 font-medium text-slate-600" style="width: 14rem">摘要</th>
             <th class="px-6 py-4 font-medium text-slate-600">状态</th>
             <th class="px-6 py-4 font-medium text-slate-600">创建时间</th>
             <th class="px-6 py-4 font-medium text-slate-600">操作</th>
