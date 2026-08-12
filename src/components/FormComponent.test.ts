@@ -38,6 +38,7 @@ describe('FormComponent', () => {
     const payload = (onChangePage.mock.calls[0]![1] as { formData: string }).formData
     const parsed = JSON.parse(payload)
     expect(parsed.applicantId).toBe(mockUsers[2].id)
+    expect(parsed.applicationType).toBe('overtime')
     expect(parsed.overtimeDate).toBe('2026-08-10')
   })
 
@@ -50,7 +51,8 @@ describe('FormComponent', () => {
     const labels = Array.from(root.querySelectorAll('label'))
     const requiredLabels = labels.filter(label => label.querySelector('.required-mark'))
 
-    expect(requiredLabels).toHaveLength(5)
+    expect(requiredLabels).toHaveLength(6)
+    expect(document.getElementById('applicationType')?.hasAttribute('required')).toBe(true)
     expect(document.getElementById('selUser')?.hasAttribute('required')).toBe(true)
     expect(document.getElementById('overtimeDate')?.hasAttribute('required')).toBe(true)
     expect(document.getElementById('startTime')?.hasAttribute('required')).toBe(true)

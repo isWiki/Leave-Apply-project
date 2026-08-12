@@ -1,9 +1,14 @@
 // 状态，localStorage 持久化
-import type { OvertimeApply, OvertimeStatus } from './types.js'
+import type { Application, ApplicationStatus, FormValue } from './types.js'
 
-const STORAGE_KEY = 'overtime_apply_list'
+const STORAGE_KEY = 'approval_workflow_list'
 
-export function getApplyList(): OvertimeApply[] {
+function canUseStorage() {
+  return typeof localStorage !== 'undefined'
+}
+
+export function getApplyList(): Application[] {
+  if (!canUseStorage()) return []
   const str = localStorage.getItem(STORAGE_KEY)
   if (!str) return []
   try {
@@ -13,23 +18,24 @@ export function getApplyList(): OvertimeApply[] {
   }
 }
 
-export function saveApplyList(list: OvertimeApply[]) {
+export function saveApplyList(list: Application[]) {
+  if (!canUseStorage()) return
   localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
 }
 
-export function createApply(data: Omit<OvertimeApply, 'id' | 'createTime'>): OvertimeApply {
+export function createApply(data: FormValue & { status: ApplicationStatus }): Application {
   const list = getApplyList()
-  const newItem: OvertimeApply = {
+  const newItem = {
     ...data,
     id: Date.now().toString(),
     createTime: new Date().toISOString()
-  }
+  } as Application
   list.unshift(newItem)
   saveApplyList(list)
   return newItem
 }
 
-export function updateApplyStatus(id: string, status: OvertimeStatus): boolean {
+export function updateApplyStatus(id: string, status: ApplicationStatus): boolean {
   const list = getApplyList()
   const idx = list.findIndex(i => i.id === id)
   if (idx === -1) return false
@@ -38,7 +44,7 @@ export function updateApplyStatus(id: string, status: OvertimeStatus): boolean {
   return true
 }
 
-export function getApplyById(id: string): OvertimeApply | undefined {
+export function getApplyById(id: string): Application | undefined {
   return getApplyList().find(i => i.id === id)
 }
 
@@ -46,7 +52,7 @@ export function getApplyById(id: string): OvertimeApply | undefined {
 export function getStat() {
   const list = getApplyList()
   const pending = list.filter(i => i.status === 'pending').length
-  const pass = list.filter(i => i.status === 'pass').length
-  const reject = list.filter(i => i.status === 'reject').length
-  return { total: list.length, pending, pass, reject }
+  const approved = list.filter(i => i.status === 'approved').length
+  const rejected = list.filter(i => i.status === 'rejected').length
+  return { total: list.length, pending, approved, rejected }
 }
