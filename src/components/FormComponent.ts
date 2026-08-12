@@ -6,6 +6,7 @@ import { createEmptyForm, validateForm } from '../application.js'
 import { genEl } from '../utils.js'
 
 let cacheForm: FormValue = createEmptyForm(currentUser.id)
+let cacheEditId = ''
 
 type PageCb = (page: PageType, payload?: Record<string, string>) => void
 
@@ -160,8 +161,9 @@ function renderTypeFields(container: HTMLElement, form: FormValue) {
   container.appendChild(description)
 }
 
-export function renderForm(root: HTMLElement, onChangePage: PageCb, prefill?: FormValue) {
+export function renderForm(root: HTMLElement, onChangePage: PageCb, prefill?: FormValue, editId = '') {
   if (prefill) cacheForm = { ...prefill }
+  cacheEditId = editId
   root.append(genEl('h2', {}, '发起申请'))
 
   const form = genEl('div', { style: 'display:flex;flex-direction:column;gap:12px;max-width:100%;' })
@@ -206,7 +208,7 @@ export function renderForm(root: HTMLElement, onChangePage: PageCb, prefill?: Fo
       return
     }
     cacheForm = val
-    onChangePage('preview', { formData: JSON.stringify(val) })
+    onChangePage('preview', { formData: JSON.stringify(val), editId: cacheEditId })
   }
   btnWrap.appendChild(btnPreview)
   form.appendChild(btnWrap)
@@ -219,6 +221,7 @@ export function getCachedForm(): FormValue {
 
 export function clearCachedForm() {
   cacheForm = createEmptyForm(currentUser.id)
+  cacheEditId = ''
 }
 
 export type { FormValue }

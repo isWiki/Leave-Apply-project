@@ -27,12 +27,24 @@ export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   rejected: '已驳回'
 }
 
+/** 各申请类型的多级审批节点配置 */
+const STANDARD_APPROVAL_CHAIN = ['部门主管', '财务', '总经理']
+
+export const APPROVAL_CHAINS: Record<ApplicationType, string[]> = {
+  overtime: STANDARD_APPROVAL_CHAIN,
+  travel: STANDARD_APPROVAL_CHAIN,
+  purchase: STANDARD_APPROVAL_CHAIN,
+  reimbursement: STANDARD_APPROVAL_CHAIN
+}
+
 export type BaseApplication = {
   id: string
   applicantId: string
   applicationType: ApplicationType
   status: ApplicationStatus
   createTime: string
+  /** 当前待审批节点索引（0 为首个节点） */
+  currentNodeIndex: number
 }
 
 export type OvertimeApplication = BaseApplication & {

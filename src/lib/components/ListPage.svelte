@@ -6,7 +6,7 @@
   import {
     getApplicationSummary,
     getApplicationTypeLabel,
-    getStatusLabel
+    getApplicationStatusLabel
   } from '../../application';
   import type { PageType } from '../../types';
 
@@ -52,7 +52,7 @@
               <td class="px-6 py-4 text-slate-700">{mockUsers.find((user) => user.id === item.applicantId)?.name}</td>
               <td class="px-6 py-4 text-slate-700">{getApplicationTypeLabel(item.applicationType)}</td>
               <td class="px-6 py-4 text-slate-700">{getApplicationSummary(item)}</td>
-              <td class="px-6 py-4 text-slate-700">{getStatusLabel(item.status)}</td>
+              <td class="px-6 py-4 text-slate-700">{getApplicationStatusLabel(item)}</td>
               <td class="px-6 py-4 text-slate-700">{formatDateShort(item.createTime)}</td>
               <td class="px-6 py-4">
                 <div class="flex flex-wrap gap-2">

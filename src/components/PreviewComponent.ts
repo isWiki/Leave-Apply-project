@@ -2,7 +2,7 @@
 import type { FormValue, PageType } from '../types.js'
 import { mockUsers } from '../mock.js'
 import { genEl } from '../utils.js'
-import { createApply } from '../store.js'
+import { createApply, resubmitApply } from '../store.js'
 import { clearCachedForm } from './FormComponent.js'
 import {
   getApplicationDetailFields,
@@ -31,14 +31,22 @@ export function renderPreview(root: HTMLElement, onChangePage: PageCb, payload?:
   btnEdit.onclick = () => {
     onChangePage('form', { formData: JSON.stringify(form) })
   }
-  const btnSubmit = genEl('button', {}, '确认提交申请')
+  const btnSubmit = genEl('button', {}, payload.editId ? '确认重新提交' : '确认提交申请')
   btnSubmit.onclick = () => {
-    createApply({
-      ...form,
-      status: 'pending'
-    })
+    if (payload.editId) {
+      if (!resubmitApply(payload.editId, form)) {
+        alert('重新提交失败，请返回详情页重试。')
+        return
+      }
+      alert('重新提交成功！')
+    } else {
+      createApply({
+        ...form,
+        status: 'pending'
+      })
+      alert('提交成功！')
+    }
     clearCachedForm()
-    alert('提交成功！')
     onChangePage('list')
   }
   btnWrap.appendChild(btnEdit)

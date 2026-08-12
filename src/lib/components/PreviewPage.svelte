@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { mockUsers } from '../../mock';
-  import { createApply } from '../../store';
+  import { createApply, resubmitApply } from '../../store';
   import {
     getApplicationDetailFields,
     getApplicationTypeLabel,
@@ -12,6 +12,7 @@
 
   const dispatch = createEventDispatcher<{ navigate: { page: PageType; payload?: Record<string, string> } }>();
   export let formData = '';
+  export let editId = '';
 
   const form: FormValue = parseFormValue(formData, currentUser.id);
   const user = mockUsers.find((item) => item.id === form.applicantId);
@@ -22,11 +23,19 @@
   }
 
   function submit() {
-    createApply({
-      ...form,
-      status: 'pending'
-    });
-    alert('提交成功！');
+    if (editId) {
+      if (!resubmitApply(editId, form)) {
+        alert('重新提交失败，请返回详情页重试。');
+        return;
+      }
+      alert('重新提交成功！');
+    } else {
+      createApply({
+        ...form,
+        status: 'pending'
+      });
+      alert('提交成功！');
+    }
     dispatch('navigate', { page: 'list' });
   }
 </script>
@@ -58,6 +67,8 @@
 
   <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
     <button type="button" class="btn-secondary w-full sm:w-auto" on:click={back}>返回修改表单</button>
-    <button type="button" class="btn-primary w-full sm:w-auto" on:click={submit}>确认提交申请</button>
+    <button type="button" class="btn-primary w-full sm:w-auto" on:click={submit}>
+      {editId ? '确认重新提交' : '确认提交申请'}
+    </button>
   </div>
 </section>

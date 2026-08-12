@@ -9,7 +9,7 @@ function onChangePage(page: PageType, payload?: Record<string, string>) {
   // 预览回跳表单回填
   if (page === 'form' && payload?.formData) {
     const prefill = JSON.parse(payload.formData)
-    renderForm(document.getElementById('app')!, onChangePage, prefill)
+    renderForm(document.getElementById('app')!, onChangePage, prefill, payload.editId)
     return
   }
   renderPage(page, payload)

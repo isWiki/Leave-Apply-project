@@ -16,6 +16,7 @@
   const dispatch = createEventDispatcher<{ navigate: { page: PageType; payload?: Record<string, string> } }>();
 
   export let prefill: FormValue | string | undefined = undefined;
+  export let editId = '';
 
   let form: FormValue = parseFormValue(prefill, currentUser.id);
 
@@ -35,7 +36,10 @@
     }
     dispatch('navigate', {
       page: 'preview',
-      payload: { formData: JSON.stringify(form) }
+      payload: {
+        formData: JSON.stringify(form),
+        editId
+      }
     });
   }
 </script>

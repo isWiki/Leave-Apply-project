@@ -53,9 +53,17 @@
     </header>
 
     {#if page === 'form'}
-      <FormPage prefill={params.prefill} on:navigate={(e) => go(e.detail.page, e.detail.payload)} />
+      <FormPage
+        prefill={params.prefill}
+        editId={params.editId}
+        on:navigate={(e) => go(e.detail.page, e.detail.payload)}
+      />
     {:else if page === 'preview'}
-      <PreviewPage formData={params.formData} on:navigate={(e) => go(e.detail.page, e.detail.payload)} />
+      <PreviewPage
+        formData={params.formData}
+        editId={params.editId}
+        on:navigate={(e) => go(e.detail.page, e.detail.payload)}
+      />
     {:else if page === 'list'}
       <ListPage on:navigate={(e) => go(e.detail.page, e.detail.payload)} />
     {:else if page === 'detail'}

@@ -6,7 +6,7 @@ import type { PageType } from '../types.js'
 import {
   getApplicationSummary,
   getApplicationTypeLabel,
-  getStatusLabel
+  getApplicationStatusLabel
 } from '../application.js'
 
 type PageCb = (page: PageType, payload?: Record<string, string>) => void
@@ -40,7 +40,7 @@ export function renderList(root: HTMLElement, onChangePage: PageCb) {
       <td style="border:1px solid #aaa;padding:6px">${user?.name}</td>
       <td style="border:1px solid #aaa;padding:6px">${getApplicationTypeLabel(item.applicationType)}</td>
       <td style="border:1px solid #aaa;padding:6px">${getApplicationSummary(item)}</td>
-      <td style="border:1px solid #aaa;padding:6px">${getStatusLabel(item.status)}</td>
+      <td style="border:1px solid #aaa;padding:6px">${getApplicationStatusLabel(item)}</td>
       <td style="border:1px solid #aaa;padding:6px">${formatDateShort(item.createTime)}</td>
     `
     const tdOp = genEl('td', { style: 'border:1px solid #aaa;padding:6px' })

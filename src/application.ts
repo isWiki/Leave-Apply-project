@@ -10,6 +10,7 @@ import type {
 } from './types.js'
 import { APPLICATION_STATUS_LABELS, APPLICATION_TYPES } from './types.js'
 import { formatDate } from './utils.js'
+import { getApprovalStatusLabel } from './approval.js'
 
 export function getApplicationTypeLabel(type: ApplicationType): string {
   return APPLICATION_TYPES.find(item => item.value === type)?.label ?? type
@@ -17,6 +18,10 @@ export function getApplicationTypeLabel(type: ApplicationType): string {
 
 export function getStatusLabel(status: ApplicationStatus): string {
   return APPLICATION_STATUS_LABELS[status] ?? status
+}
+
+export function getApplicationStatusLabel(app: Application): string {
+  return getApprovalStatusLabel(app)
 }
 
 export function createEmptyForm(applicantId: string, type: ApplicationType = 'overtime'): FormValue {
